@@ -1,6 +1,7 @@
 package com.github.batulovandrey.yandextranslator.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author Andrey Batulov on 24/09/2017
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TranslationBean {
 
     @JsonProperty("code")
