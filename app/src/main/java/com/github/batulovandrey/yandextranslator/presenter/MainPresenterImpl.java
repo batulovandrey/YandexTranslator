@@ -1,6 +1,5 @@
 package com.github.batulovandrey.yandextranslator.presenter;
 
-import com.github.batulovandrey.yandextranslator.ApiClient;
 import com.github.batulovandrey.yandextranslator.model.MainModel;
 import com.github.batulovandrey.yandextranslator.view.MainView;
 
@@ -15,7 +14,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     public MainPresenterImpl(MainView mainView) {
         mMainView = mainView;
-        mMainModel = new MainModel(this, new ApiClient());
+        mMainModel = new MainModel(this);
     }
 
     @Override
