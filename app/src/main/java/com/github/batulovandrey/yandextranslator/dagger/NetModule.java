@@ -1,5 +1,9 @@
 package com.github.batulovandrey.yandextranslator.dagger;
 
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.github.batulovandrey.yandextranslator.TranslationService;
 
 import javax.inject.Singleton;
@@ -42,5 +46,11 @@ public class NetModule {
     @Singleton
     TranslationService provideTranslationService(Retrofit retrofit) {
         return retrofit.create(TranslationService.class);
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPreferences(Application application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 }

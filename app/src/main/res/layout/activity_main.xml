@@ -8,6 +8,21 @@
     android:padding="@dimen/padding_medium"
     tools:context="com.github.batulovandrey.yandextranslator.MainActivity">
 
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/switch_compat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/lang_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/switch_compat"
+        android:layout_below="@id/switch_compat"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        tools:text="en-ru"/>
+
     <EditText
         android:id="@+id/input_edit_text"
         android:layout_width="match_parent"
@@ -42,6 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/translate"/>
+        tools:text="@string/translate"/>
 
 </RelativeLayout>
