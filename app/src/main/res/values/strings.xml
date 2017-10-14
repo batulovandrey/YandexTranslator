@@ -6,4 +6,5 @@
     <string name="en_ru">en-ru</string>
     <string name="ru_en">ru-en</string>
     <string name="translate_ru">перевести</string>
+    <string name="no_connection">Нет соединения</string>
 </resources>

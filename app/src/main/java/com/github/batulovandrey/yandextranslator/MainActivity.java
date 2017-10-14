@@ -93,4 +93,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         int stringResId = checked ? R.string.en_ru : R.string.ru_en;
         mLangTextView.setText(getString(stringResId));
     }
+
+    @Override
+    public void showConnectionError() {
+        Toast.makeText(this, R.string.no_connection, Toast.LENGTH_LONG).show();
+    }
 }

@@ -21,4 +21,6 @@ public interface MainPresenter {
     void changeLanguage(boolean isEnRu);
 
     void getLanguage();
+
+    void showConnectionError();
 }

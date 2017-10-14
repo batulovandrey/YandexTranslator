@@ -1,6 +1,7 @@
 package com.github.batulovandrey.yandextranslator.dagger;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -24,5 +25,10 @@ public class AppModule {
     @Singleton
     Application provideApplication() {
         return mApplication;
+    }
+
+    @Provides
+    Context provideApplicationContext() {
+        return mApplication.getApplicationContext();
     }
 }

@@ -15,4 +15,6 @@ public interface MainView {
     void showTranslation(String translatedText);
 
     void showDefaultLanguageChecked(boolean show);
+
+    void showConnectionError();
 }

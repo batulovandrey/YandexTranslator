@@ -56,4 +56,9 @@ public class MainPresenterImpl implements MainPresenter {
     public void getLanguage() {
         mMainModel.isDefaultLanguageChecked();
     }
+
+    @Override
+    public void showConnectionError() {
+        mMainView.showConnectionError();
+    }
 }

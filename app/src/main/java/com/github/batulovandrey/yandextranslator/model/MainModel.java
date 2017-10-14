@@ -1,11 +1,13 @@
 package com.github.batulovandrey.yandextranslator.model;
 
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.github.batulovandrey.yandextranslator.TranslationService;
-import com.github.batulovandrey.yandextranslator.bean.TranslationBean;
 import com.github.batulovandrey.yandextranslator.TranslatorApp;
+import com.github.batulovandrey.yandextranslator.bean.TranslationBean;
 import com.github.batulovandrey.yandextranslator.presenter.MainPresenter;
 
 import java.util.List;
@@ -37,6 +39,9 @@ public class MainModel {
     @Inject
     SharedPreferences mPreferences;
 
+    @Inject
+    ConnectivityManager mConnectivityManager;
+
     public MainModel(MainPresenter mainPresenter) {
         TranslatorApp.getNetComponent().inject(this);
         mMainPresenter = mainPresenter;
@@ -50,38 +55,52 @@ public class MainModel {
     }
 
     public void processTranslation(String sourceText) {
-        mMainPresenter.showProgress();
         String lang = isDefaultLanguageChecked() ? LANG_DEFAULT : LANG_RU_EN;
-        Call<TranslationBean> call = mService.getTranslation(KEY, sourceText, lang, FORMAT, OPTIONS);
-        call.enqueue(new Callback<TranslationBean>() {
-            @Override
-            public void onResponse(@NonNull Call<TranslationBean> call, @NonNull Response<TranslationBean> response) {
-                if (response.isSuccessful()) {
-                    TranslationBean bean = response.body();
-                    if (bean != null) {
-                        List<String> translations = bean.getTranslationList();
-                        if (!translations.isEmpty()) {
-                            String translation = translations.get(0);
-                            mMainPresenter.hideProgress();
-                            mMainPresenter.showTranslation(translation);
+        if (hasConnection()) {
+            mMainPresenter.showProgress();
+            Call<TranslationBean> call = mService.getTranslation(KEY, sourceText, lang, FORMAT, OPTIONS);
+            call.enqueue(new Callback<TranslationBean>() {
+                @Override
+                public void onResponse(@NonNull Call<TranslationBean> call, @NonNull Response<TranslationBean> response) {
+                    if (response.isSuccessful()) {
+                        TranslationBean bean = response.body();
+                        if (bean != null) {
+                            List<String> translations = bean.getTranslationList();
+                            if (!translations.isEmpty()) {
+                                String translation = translations.get(0);
+                                mMainPresenter.hideProgress();
+                                mMainPresenter.showTranslation(translation);
+                            }
+                        } else {
+                            mMainPresenter.showError();
                         }
-                    } else {
-                        mMainPresenter.showError();
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<TranslationBean> call, Throwable t) {
-                mMainPresenter.hideProgress();
-                mMainPresenter.showError();
-            }
-        });
+                @Override
+                public void onFailure(Call<TranslationBean> call, Throwable t) {
+                    mMainPresenter.hideProgress();
+                    mMainPresenter.showError();
+                }
+            });
+        } else {
+            mMainPresenter.showConnectionError();
+        }
     }
 
     public boolean isDefaultLanguageChecked() {
         boolean isDefaultChecked = mPreferences.getBoolean(LANG, true);
         mMainPresenter.changeLanguage(isDefaultChecked);
         return isDefaultChecked;
+    }
+
+    private boolean hasConnection() {
+        boolean connected = false;
+        if (mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        return connected;
     }
 }
